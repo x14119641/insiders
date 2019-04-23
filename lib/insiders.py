@@ -41,8 +41,8 @@ class InsiderScraper:
             raise ValueError
 
         for n in range(0, n):
-            yield self.get_page(page_url=self.format_url(n))
             time.sleep(3)
+            yield self.get_page(page_url=self.format_url(n))
 
     def format_url(self, n):
         return self.url + f'&p={n}&n=100'
@@ -153,16 +153,16 @@ def print_generator(gene):
 
 
 def main():
-    insider = InsiderScraper()
+    insider = InsiderScraper(sells=False)
     print(insider.__repr__)
     max_pages = insider.get_max_pages()
     print('Max pages are :', max_pages)
-    page_2 = insider.get_page(n=2)
+    page_2 = insider.get_page(n=1)
     print('Page 2:')
     print(list(page_2))
 
     print('Iterating pages:')
-    gene = insider.iterate_pages(3)
+    gene = insider.iterate_pages(2)
     print(gene)
     print_generator(gene)
 
