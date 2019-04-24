@@ -1,4 +1,4 @@
-from lib import insiders
+from bin import insiders
 import unittest
 import inspect
 

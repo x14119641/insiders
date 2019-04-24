@@ -22,9 +22,13 @@ class InsiderScraper:
 
     def __repr__(self):
         """Object representation"""
-        return f'InisderScraper(url:{self.url}, sells={self.sells})'
+        return f'{self.__class__.__name__}(url={self.url}, sells={self.sells})'
 
-    def iterate_pages(self, n=0):
+    def __str__(self):
+        """Object string"""
+        return f'url = {self.url}, sells = {self.sells}'
+
+    def iterate_pages(self, n=0, sleep=3):
         """Iterates n pages and formats the url.
 
         Args:
@@ -41,7 +45,7 @@ class InsiderScraper:
             raise ValueError
 
         for n in range(0, n):
-            time.sleep(3)
+            time.sleep(sleep)
             yield self.get_page(page_url=self.format_url(n))
 
     def format_url(self, n):
@@ -144,28 +148,3 @@ class InsiderScraper:
             "P/E": p_e,
             "Market Cap ($M)": market_cap
         }
-
-
-def print_generator(gene):
-    for item in gene:
-        print(list(item))
-    return 'Done'
-
-
-def main():
-    insider = InsiderScraper(sells=False)
-    print(insider.__repr__)
-    max_pages = insider.get_max_pages()
-    print('Max pages are :', max_pages)
-    page_2 = insider.get_page(n=1)
-    print('Page 2:')
-    print(list(page_2))
-
-    print('Iterating pages:')
-    gene = insider.iterate_pages(2)
-    print(gene)
-    print_generator(gene)
-
-
-if __name__ == '__main__':
-    main()
