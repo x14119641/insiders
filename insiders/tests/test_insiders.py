@@ -2,7 +2,7 @@ import unittest
 import inspect
 import sys
 sys.path.append('../')  # noqa
-from bin import insiders  # noqa
+from src import insiders # noqa
 
 
 class InsiderTest(unittest.TestCase):
