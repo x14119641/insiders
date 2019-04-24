@@ -1,6 +1,6 @@
 
 from tests import test_insiders
-from bin import insiders
+from src import insiders
 
 
 def print_generator(gene):
