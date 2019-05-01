@@ -98,10 +98,10 @@ class InsiderScraper:
                 rest_of_data = self.get_buys_tds()
 
             my_obj = {
-                "Country": country,
                 "Symbol": symbol,
-                "Insider": insider,
                 "Company": company,
+                "Country": country,
+                "Insider": insider,
                 "Position": position,
                 "Date": date,
                 "Buy/Sell": buy_sell
