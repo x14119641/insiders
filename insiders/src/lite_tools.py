@@ -3,9 +3,9 @@ import sqlite3
 
 class IntoLite:
 
-    # def __init__(self, host='localhost',
-    #              dbname='postgres', user='postgres'):
-    def __init__(self, db_file='../data/insiders.db'):
+    def __init__(self, db_file=None):
+        if not db_file:
+            db_file = get_data_path()
         self.conn = self.create_connection(db_file)
 
     def create_connection(self, db_file):
@@ -28,7 +28,6 @@ class IntoLite:
                 sql_str: str, SQL statment
                 return_obj: bool, returns cursor object
         """
-        print(self.conn)
         try:
             cur = self.conn.cursor()
             cur.execute(sql_str)
@@ -45,9 +44,10 @@ class IntoLite:
         interrogants = '?, '*len(columns)
         interrogants = interrogants.strip(', ')
 
-        sql_str = ''' INSERT INTO %s (%s) VALUES (%s)''' % (table_name,
-                                                            ', '.join(columns),
-                                                            interrogants)
+        sql_str = ''' INSERT OR IGNORE INTO %s (%s)
+        VALUES (%s)''' % (table_name,
+                          ', '.join(columns),
+                          interrogants)
         # print(sql_str)
         with self.conn:
             cur = self.conn.cursor()
@@ -65,7 +65,6 @@ class IntoLite:
     def create_insiders_table(self):
         self.execute_sql_str("""
             CREATE TABLE IF NOT EXISTS insiders(
-            insider_id INTEGER PRIMARY KEY,
             symbol TEXT NOT NULL,
             insider TEXT,
             position TEXT,
@@ -82,38 +81,35 @@ class IntoLite:
             FOREIGN KEY (symbol) REFERENCES symbols (symbol));
         """)
 
-    # def start_postgres_host(self):
-    #     if platform.system() == 'Windows':
-    #         subprocess.run("C:/Users/bbg844268/Documents/pgsql/bin/pg_ctl.exe " +
-    #                        "-D " +
-    #                        "C:/Users/bbg844268/Documents/pgsql/data " +
-    #                        'start')
-    #     elif platform.system() == 'Linux':
-    #         pass
-    #     else:
-    #         print('MAC')
+
+def get_data_path():
+    from pathlib import Path
+    return str(Path(__file__).resolve().parent.parent) \
+        + r'\data\insiders.db'
 
 
 def main():
     table = 'symbols'
     values = ('APPLE', 'Apple Inc.', 'EEUU')
+    data = get_data_path()
+    print(data)
 
     a = IntoLite()
 
-    a.execute_sql_str("DROP TABLE IF EXISTS symbols")
-    a.execute_sql_str("DROP TABLE IF EXISTS insiders")
-    print('deleted')
-
-    a.create_symbols_table()
-    a.create_insiders_table()
+    # a.execute_sql_str("DROP TABLE IF EXISTS symbols")
+    # a.execute_sql_str("DROP TABLE IF EXISTS insiders")
+    # print('deleted')
+    #
+    # a.create_symbols_table()
+    # a.create_insiders_table()
 
     # print('Printing tables in db: ')
     # cur = a.execute_sql_str("SELECT name FROM sqlite_master WHERE type='table';",
     #                         return_obj=True)
     # print(cur.fetchall())
     #
-    print('Insert values: ', values, ' :')
-    a.execute_insert(table, values)
+    # print('Insert values: ', values, ' :')
+    # a.execute_insert(table, values)
     print(a.execute_sql_str('SELECT * FROM symbols', return_obj=True).fetchall())
 
 

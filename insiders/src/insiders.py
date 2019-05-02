@@ -28,7 +28,7 @@ class InsiderScraper:
         """Object string"""
         return f'url = {self.url}, sells = {self.sells}'
 
-    def iterate_pages(self, n=0, sleep=3):
+    def iterate_pages(self, n=0, sleep=2):
         """Iterates n pages and formats the url.
 
         Args:
